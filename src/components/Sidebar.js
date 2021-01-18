@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { getSelectedOffer } from "../reducers";
+import Slider from "./Slider";
 
 const Sidebar = (props) => {
   const selectedOffer = useSelector(getSelectedOffer);
@@ -11,7 +12,7 @@ const Sidebar = (props) => {
       <Head>{""} </Head>
       {selectedOffer ? (
         <Wrapper>
-          <img src={selectedOffer.img} alt="" height="200" width="300" />
+          <Slider first={selectedOffer.img} />
           <h3> {selectedOffer.rent}</h3>
           <p>2330 Rue Sherbrooke Ouest - Montréal, QC </p>
           <h4>{selectedOffer.type} </h4>
