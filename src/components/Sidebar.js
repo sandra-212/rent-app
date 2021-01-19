@@ -1,12 +1,33 @@
-import React from "react";
+import React, {useState} from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { getSelectedOffer } from "../reducers";
 import Slider from "./Slider";
 
+const sortOptions = ["Sort", "Price - $", "Price -$$$"];
+
 const Sidebar = (props) => {
   const selectedOffer = useSelector(getSelectedOffer);
-
+  const [option, setOption] = useState("Sort");
+  const handleOptionSelect = (ev) => {
+    setOption(ev.target.value);
+  };
+  const compareDesc = (a, b) => {
+    return a.rent > b.rent ? 1 : -1;
+  };
+  const compareAsc = (a, b) => {
+    return a.rent < b.rent ? 1 : -1;
+  };
+  const filterOffers = (offers) => {
+    if (option === "Sort") {
+      return offers;
+    } else if (option === "Price - $") {
+      return offers.sort(compareDesc);
+    } else if (option === "Price -$$$") {
+      return offers.sort(compareAsc);
+    }
+  };
+  const offers = filterOffers(props.offers);
   return (
     <div>
       <Head>{""} </Head>
@@ -21,9 +42,15 @@ const Sidebar = (props) => {
       ) : (
         <div>
           <Head>Montréal Apartments, Condos and Houses for Rent </Head>
-          <NumOffers>{props.offers.length} Rentals found</NumOffers>
+          <NumOffers>{props.offers.length} Rentals found
+            <Select value={option} onChange={handleOptionSelect}>
+                {sortOptions.map((sort, i) => (
+                  <option key={i}>{sort}</option>
+                ))}
+              </Select>
+          </NumOffers>
           <Wrapper>
-            {props.offers.map((offer) => {
+            {offers.map((offer) => {
               return (
                 <ul key={offer.id}>
                   <h3> {offer.rent}</h3>
@@ -76,5 +103,9 @@ const NumOffers = styled.p`
   margin: 0;
   text-align: center;
 `;
-
+const Select = styled.select`
+  width: 100px;
+  margin-left: 20px;
+  height: 30px;
+`;
 export default Sidebar;
