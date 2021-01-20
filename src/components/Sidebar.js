@@ -18,13 +18,15 @@ const Sidebar = (props) => {
   const compareAsc = (a, b) => {
     return a.rent < b.rent ? 1 : -1;
   };
+  
   const filterOffers = (offers) => {
-    if (option === "Sort") {
-      return offers;
-    } else if (option === "Price - $") {
-      return offers.sort(compareDesc);
-    } else if (option === "Price -$$$") {
-      return offers.sort(compareAsc);
+    switch (option) {
+      case "Price - $":
+        return offers.sort(compareDesc);
+      case "Price -$$$":
+        return offers.sort(compareAsc);
+      default:
+        return offers;
     }
   };
   const offers = filterOffers(props.offers);
